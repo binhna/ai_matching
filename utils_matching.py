@@ -22,8 +22,8 @@ def word_tokenize(s, pre_pos=['名詞']):
 
 # jaccard_similarity(sent, skill)
 def jaccard_similarity(predicted, gold):
-    # predicted = predicted.split(' ')
-    # gold = word_tokenize(gold, '')
+    predicted = predicted.split(' ')
+    gold = word_tokenize(gold, '')
     intersection = set(predicted).intersection(set(gold))
     union = set(predicted).union(set(gold))
     return len(intersection)/len(union)
@@ -32,7 +32,7 @@ def preprocess(query):
     sent = word_tokenize(query)
     sent = stopword_remover(sent)
     print(sent)
-    new_sent = ''.join(sent)
+    new_sent = ' '.join(sent)
     return new_sent
 
 # preprocessed sentence, list of skills
@@ -46,7 +46,7 @@ def matcher(sent, skills):
     # print(f"output: {countries[result.index(max(result))]}")
     #return ac_db[result.index(max(result))]
     score = result[0][0]
-    if score != 0:
+    if score > 0:
         result = [skill[1] for skill in result if skill[0] == score]
         return result
     print('Cant find candidate')
@@ -66,4 +66,10 @@ if __name__ == "__main__":
     # query = 'コンピュータグラフィックス候補'
     # ứng viên hồi sức cấp cứu
     query = '緊急蘇生の候補者'
+    # ứng viên nha khoa
+    query = '歯科候補者'
+    # ứng viên chuyên khoa răng
+    # query = '歯科専門医候補者'
+    # ứng viên chuyên răng miệng
+    # query = '歯科候補者'
     get_skills(query)

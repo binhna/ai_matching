@@ -61,4 +61,3 @@ def get(es, config):
     # take decoded string and make into JSON object
     json_dict = json.loads(decoded_pdf)
     # print("\njson_str:", json_dict, "\nntype:", type(json_dict))
-
