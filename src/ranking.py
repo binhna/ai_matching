@@ -1,21 +1,24 @@
 import pickle
-import pandas as pd
 import MeCab
 import re
-from copy import deepcopy
-from numpy import dot
-from numpy.linalg import norm
+import os
+import sys
+dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = '/'.join(dir_path.split('/')[:-1])
+sys.path.append(dir_path)
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
+DATA_PATH = os.path.join(dir_path, 'data/')
+
 m = MeCab.Tagger(f"-Ochasen")
 symbols = list("!！\"#$%&()*+-./:;<=>?@[\]^_`{|}~\n？、。〃〄々〆〇〈〉～《》「」『』【】〒〓〔〕〖〗〘〙〚〛〜〝〞〟〠〡〢〣〤〥〦〧〨〩 〬 〭 〮 〯〰〵〶〷〸〹〺〻〼〽〾〿）（")
 stop_words = ['経験', '治療', '候補', '者', '区']
-feature_path = "../feature.pkl"
-tfidftransformer_path = '../tfidf_transformer.pkl'
-tfidf_docs_path = '../tfidf_docs.pkl'
-index2id_path = '../index2id.pkl'
+feature_path = DATA_PATH + 'feature.pkl'
+tfidftransformer_path = DATA_PATH + 'tfidf_transformer.pkl'
+tfidf_docs_path = DATA_PATH + 'tfidf_docs.pkl'
+index2id_path = DATA_PATH + 'index2id.pkl'
 
 loaded_vec = CountVectorizer(decode_error="replace", vocabulary=pickle.load(open(feature_path, "rb")))
 tfidf_transformer = pickle.load(open(tfidftransformer_path, "rb"))
