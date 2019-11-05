@@ -5,11 +5,15 @@ __pycache__/
 
 # C extensions
 *.so
+*.pkl
+*.xlsx
+*.txt
 
 # Distribution / packaging
 .DS_Store
 .vscode
 .Python
+notebooks/
 build/
 develop-eggs/
 dist/

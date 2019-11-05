@@ -9,7 +9,12 @@ import re
 from copy import deepcopy
 from numpy import dot
 from numpy.linalg import norm
+import pickle
 
+#instantiate CountVectorizer()
+cv = CountVectorizer()
+#tfidf calculator
+tfidf_transformer = TfidfTransformer(smooth_idf=True, use_idf=True)
 
 m = MeCab.Tagger(f"-Ochasen")
 symbols = list(
@@ -102,20 +107,28 @@ def df2collection(df):
     return collections
 
 
-def get_by_id(id):
+def get_info_by_id(id, goal_df):
     index = goal_df[goal_df['id'] == id].index.values[0]
     print('index: ', index)
     print(docs[index])
     return goal_df[goal_df['id'] == id].to_dict()
 
 def docs2tfidf(docs):
-    # settings that you use for count vectorizer will go here
-    tfidf_vectorizer = TfidfVectorizer(use_idf=True)
+    # this steps generates word counts for the words in your docs
+    word_count_collections = cv.fit_transform(docs)
+    tfidf_transformer.fit(word_count_collections)
 
-    # just send in all your docs here
-    tfidf_matrix = tfidf_vectorizer.fit_transform(docs)
-    return tfidf_matrix
+    tfidf_docs = tfidf_transformer.transform(word_count_collections)
+    return tfidf_docs
 
+def dump_tfidf():
+    feature_path = "../data/vocabs.pkl"
+    with open(feature_path, 'wb') as fw:
+        pickle.dump(cv.vocabulary_, fw)
+
+    tfidftransformer_path = '../data/tfidf_transformer_candidate.pkl'
+    with open(tfidftransformer_path, 'wb') as fw:
+        pickle.dump(tfidf_transformer, fw)
 
 def padding(docs):
     max_len = max([len(cv) for cv in docs])
